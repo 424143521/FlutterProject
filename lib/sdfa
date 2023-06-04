@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
+class AnalysisCustomerPage extends StatefulWidget {
+  @override
+  _AnalysisCustomerPageState createState() => _AnalysisCustomerPageState();
+}
+
+class _AnalysisCustomerPageState extends State<AnalysisCustomerPage> {
+  List<ChartData> customerData = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    customerData.add(ChartData('一般挽留客户', 1, rate: 1/36));
+    customerData.add(ChartData('一般保持客户', 2, rate: 2/36));
+    customerData.add(ChartData('一般发展客户', 3, rate: 3/36));
+    customerData.add(ChartData('一般价值客户', 4, rate: 4/36));
+    customerData.add(ChartData('重要挽留客户', 5, rate: 5/36));
+    customerData.add(ChartData('重要保持客户', 6, rate: 6/36));
+    customerData.add(ChartData('重要发展客户', 7, rate: 7/36));
+    customerData.add(ChartData('重要价值客户', 8, rate: 8/36));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return ListView(
+      children: [
+        Container(
+          height: 350,
+          child: SfCircularChart(
+            title: ChartTitle(text: '客户分类占比'),
+            // 显示图例，position显示所在位置
+            legend: Legend(isVisible: true, position: LegendPosition.right),
+            series: <CircularSeries>[
+              PieSeries<ChartData, String>(
+                dataSource: customerData,
+                // 数据块颜色
+                pointColorMapper: (ChartData data, _) => data.color,
+                xValueMapper: (ChartData data, _) => data.x,
+                yValueMapper: (ChartData data, _) => data.y,
+                // 显示数据
+                dataLabelMapper: (ChartData data, _) =>
+                (data.rate * 100).toInt().toString() + '%',
+                // 显示数据标签
+                dataLabelSettings: DataLabelSettings(isVisible: true),
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+}
+
+class ChartData {
+  ChartData(this.x, this.y, {this.color, this.rate});
+
+  final String x;
+  final double y;
+  final double rate;
+  final Color color;
+}
